@@ -1,0 +1,101 @@
+grass data -c
+
+r.in.gdal ~/Downloads/eudem_dem_5deg_n40e040.tif output="edu_raster" -e
+r.in.gdal ~/Downloads/eudem_dem_5deg_n40e040.tif output="edu_raster" location=data2
+
+
+g.proj epsg=4326
+
+
+r.slope.aspect elevation=edu_raster aspect=edu_raster_aspect slope=edu_raster_slope
+
+http://grass.osgeo.org/grass70/manuals/r.sun.html
+r.sun elev=aprica asp_in=aprica_aspect slope_in=aprica_slope day=1 time=12 incidout=aprica_1_12
+
+r.out.png input=insolMONTH_0_DAY_2_HOUR_13_MINUTES_40  output=aaa.png -t --o
+
+r.mapcalc expression='shade = if(insolMONTH_0_DAY_2_HOUR_13_MINUTES_40 != null(), 1, null())' --o
+
+r.mapcalc expression='shade1 = if(shade == 5, null(), 5)' --o
+
+r.mapcalc expression='shade = if(insolMONTH_0_DAY_2_HOUR_13_MINUTES_40>0,5,9,7)' --o
+
+r.null map=insolMONTH_0_DAY_2_HOUR_13_MINUTES_40 null=-1
+r.mapcalc expression='shade = if(insolMONTH_0_DAY_2_HOUR_13_MINUTES_40 == -1)' --o
+
+Username: vojtdubrovska
+Password: 44fmxsup
+
+datetime.date(2014,2,5).timetuple().tm_yday
+
+N: 46:11:24.684448N
+E: 10:17:04.013672E
+
+N 46.19019012444444
+E 10.284448242222222
+
+
+
+S: 46:03:06.591797N
+W: 10:05:09.627686E
+
+S 46.05183105472222
+W 10.086007690555556
+
+1) buffer na sjezdovky
+2) statistics -> slopeShedeStatistics.txt
+
+
+//http://droid-at-screen.ribomation.com/installation/
+
+__________________
+zpracovani dat
+
+A) server
+
+___Shade
+
+1) potřeba kvalitní volně dostupný DEM -> http://land.copernicus.eu/in-situ/eu-dem
+   rozlišení 25m
+
+2) digitalizace zájmového území, sjezdovek
+
+3) výpočet stínů pra zájmové území a pro časový rozsah po 10 minutách
+    78 výpočtů pro každý den
+    2340 výpočtů za měsíc
+
+    obrazek
+
+4) pro zdigitalizované sjezdovky byl použit buffer 100m a v tomto rozsahu
+   byly vypočítány ukazatele průměrného osvitu plochy za dopoledne a odpoledne
+
+   obrazek
+
+___CORINE
+1) stažení dat CORINE http://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2006-raster-3#tab-gis-data
+   rozlišení 100m
+
+2) digitalizace plochy oblasti střediska
+
+3) výpočet statistik zastoupení lesů a odhalené plochy pro zdigitalizovanou oblast
+
+    obrazek
+
+B) výpočet na mobilu
+
+__odzoomování střediska
+1) po odzoomování se zobrazí všechny střediska
+
+2) kliknutím na středisko se nazoomuje
+
+
+__klik
+1) po kliknutí do mapy se vypočte pro bod graf od kdy do kdy na něm svítí sluníčko
+
+2) informace se zobrazí v grafu
+
+__slope klik
+1) načtení vypočítaných dat o sjezdovce - pokrytí sluncem dopoledne/odpoledne
+
+2) výpočet úhlů slunečního osvitu pro celou sjezdovku
+   výpo

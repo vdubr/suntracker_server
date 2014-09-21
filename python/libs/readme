@@ -1,0 +1,26 @@
+1) git clone
+2) move to timetracker folder by cd timetracker/
+1) save dem for location from http://data.eox.at/eudem/ (or other source)
+   Consider right area of your dem, you need much larger DEM for best precise
+   computation of shade in your interested area.
+2) move dem to folder ./processingSettings/[name of region]/dem.tiff
+3) define area which you want to export to geojson http://geojson.io/
+4) move geojson to folder./processingSettings/[name of region]/extent.geojson
+5) Inport DEM and extent by running command:
+    python python/libs/inport.py -p [name of region]
+6) Open calculateShadow.py in folder python/libs/ and set year,hours,minutes
+   for you want to calculate shadows
+7) Compute shadows for days by run command:
+    python python/libs/calculateShadow.py -s "2,1" -t "2,2" -p aprica
+   It create new folder in timetracker folder with shadows, sun and region
+
+8) For analyze resort inport corine tif to GRASS to same location under name corine
+9) Digitalise resort area and slopes and save them in shapefile format
+   to folder ./processingSettings/[name of region]/slope.shp && outline.shp
+10) Inport slopes and resort by running script:
+      python python/libs/inportSlopes.py -p [name of region]
+11) Compute analyzes by running script:
+      python python/libs/analyzeResort.py -p [name of region]
+    It prepare file in [name of region]/region with statistics for resort region
+12) Prepare API for mobile application by running:
+      python python/libs/api.py -p [name of region] -n [name of Ski resort]
